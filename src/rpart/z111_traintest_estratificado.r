@@ -5,7 +5,7 @@ require("data.table")
 require("rpart")
 
 PARAM <- list()
-PARAM$semilla <- 102191
+PARAM$semilla <- 141223 
 
 #------------------------------------------------------------------------------
 # particionar agrega una columna llamada fold a un dataset
@@ -33,7 +33,7 @@ particionar <- function(
 
 # Aqui se debe poner la carpeta de la computadora local
 # Establezco el Working Directory
-setwd("X:\\gdrive\\austral2023r\\")
+setwd("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\")
 
 # cargo los datos
 dataset <- fread("./datasets/dataset_pequeno.csv")
@@ -97,3 +97,4 @@ cat("Estimulos: ", estimulos, "\n")
 cat("Aciertos (BAJA+2): ", aciertos, "\n")
 
 cat("Ganancia en testing (normalizada): ", ganancia_test_normalizada, "\n")
+
