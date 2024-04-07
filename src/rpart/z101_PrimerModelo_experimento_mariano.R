@@ -1,16 +1,23 @@
 # Arbol elemental con libreria  rpart
 # Debe tener instaladas las librerias  data.table  ,  rpart  y  rpart.plot
+rm(list = ls()) # Borro todos los objetos
+gc() # Garbage Collection
 
 # cargo las librerias que necesito
 require("data.table")
 require("rpart")
-require("rpart.plot")
+ require("rpart.plot")
 
 # Aqui se debe poner la carpeta de la materia de SU computadora local
 setwd("C:\\Users\\Mariano_Santos\\Git\\labo2024v1\\") # Establezco el Working Directory
 
 # cargo el dataset
 dataset <- fread("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\datasets\\dataset_pequeno.csv")
+dataset[clase_ternaria == "BAJA+2", clase_binaria1 := "pos"]
+dataset[clase_ternaria != "BAJA+2", clase_binaria1 := "neg"]
+dataset <-dataset[, -c("clase_ternaria")]
+
+head(dataset)
 
 dtrain <- dataset[foto_mes == 202107] # defino donde voy a entrenar
 dapply <- dataset[foto_mes == 202109] # defino donde voy a aplicar el modelo
@@ -18,7 +25,7 @@ dapply <- dataset[foto_mes == 202109] # defino donde voy a aplicar el modelo
 # genero el modelo,  aqui se construye el arbol
 # quiero predecir clase_ternaria a partir de el resto de las variables
 modelo <- rpart(
-        formula = "clase_ternaria ~ .",
+        formula = "clase_binaria1 ~ .",
         data = dtrain, # los datos donde voy a entrenar
         xval = 0,
         cp = -0.3, # esto significa no limitar la complejidad de los splits
@@ -37,22 +44,23 @@ prp(modelo,
 
 # aplico el modelo a los datos nuevos
 prediccion <- predict(
-        object = modelo,
-        newdata = dapply,
-        type = "prob"
+  object = modelo,
+  newdata = dapply,
+  type = "prob"
 )
+head(prediccion)
 
 # prediccion es una matriz con TRES columnas,
 # llamadas "BAJA+1", "BAJA+2"  y "CONTINUA"
 # cada columna es el vector de probabilidades
 
 # agrego a dapply una columna nueva que es la probabilidad de BAJA+2
-dapply[, prob_baja2 := prediccion[, "BAJA+2"]]
+dapply[, prob_baja2 := prediccion[, "pos"]]
 
 # solo le envio estimulo a los registros
 #  con probabilidad de BAJA+2 mayor  a  1/40
 dapply[, Predicted := as.numeric(prob_baja2 > 1 / 40)]
-
+head(dapply)
 # genero el archivo para Kaggle
 # primero creo la carpeta donde va el experimento
 dir.create("./exp/")
@@ -60,6 +68,6 @@ dir.create("./exp/KA2001")
 
 # solo los campos para Kaggle
 fwrite(dapply[, list(numero_de_cliente, Predicted)],
-        file = "./exp/KA2001/K101_001.csv",
+        file = "./exp/KA2001/K101_00binaria.csv",
         sep = ","
 )

@@ -11,8 +11,17 @@ require("parallel")
 
 PARAM <- list()
 # reemplazar por las propias semillas
-PARAM$semillas <- c(102191, 200177, 410551, 552581, 892237)
+PARAM$semillas <- c(100057, 100207, 100237, 100267 , 100297)
 
+
+  dataset <- fread("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\/datasets/dataset_pequeno.csv")#cambio
+  dataset[clase_ternaria == "BAJA+2", clase_binaria1 := "pos"]
+  dataset[clase_ternaria != "BAJA+2", clase_binaria1 := "neg"]
+  dataset <-dataset[, -c("clase_ternaria")]
+  dataset <- dataset[clase_binaria1 != ""]
+  #head(dataset)
+  
+  
 #------------------------------------------------------------------------------
 # particionar agrega una columna llamada fold a un dataset
 #  que consiste en una particion estratificada segun agrupa
@@ -34,11 +43,11 @@ particionar <- function(data, division, agrupa = "", campo = "fold", start = 1, 
 
 ArbolEstimarGanancia <- function(semilla, param_basicos) {
   # particiono estratificadamente el dataset
-  particionar(dataset, division = c(7, 3), agrupa = "clase_ternaria", seed = semilla)
+  particionar(dataset, division = c(7, 3), agrupa = "clase_binaria1", seed = semilla)
 
   # genero el modelo
   # quiero predecir clase_ternaria a partir del resto
-  modelo <- rpart("clase_ternaria ~ .",
+  modelo <- rpart("clase_binaria1 ~ .",
     data = dataset[fold == 1], # fold==1  es training,  el 70% de los datos
     xval = 0,
     control = param_basicos
@@ -53,13 +62,13 @@ ArbolEstimarGanancia <- function(semilla, param_basicos) {
   # prediccion es una matriz con TRES columnas,
   #  llamadas "BAJA+1", "BAJA+2"  y "CONTINUA"
   # cada columna es el vector de probabilidades
-
+ 
 
   # calculo la ganancia en testing  qu es fold==2
   ganancia_test <- dataset[
     fold == 2,
-    sum(ifelse(prediccion[, "BAJA+2"] > 0.025,
-      ifelse(clase_ternaria == "BAJA+2", 117000, -3000),
+    sum(ifelse(prediccion[, "pos"] > 0.025,
+      ifelse(clase_binaria1 == "pos", 117000, -3000),
       0
     ))
   ]
@@ -78,7 +87,7 @@ ArbolesMontecarlo <- function(semillas, param_basicos) {
     semillas, # paso el vector de semillas
     MoreArgs = list(param_basicos), # aqui paso el segundo parametro
     SIMPLIFY = FALSE,
-    mc.cores = 5 # en Windows este valor debe ser 1
+    mc.cores = 1 # en Windows este valor debe ser 1
   )
 
   ganancia_promedio <- mean(unlist(ganancias))
@@ -89,14 +98,11 @@ ArbolesMontecarlo <- function(semillas, param_basicos) {
 #------------------------------------------------------------------------------
 
 # Aqui se debe poner la carpeta de la computadora local
-setwd("~/buckets/b1/") # Establezco el Working Directory
+setwd("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\") # Establezco el Working Directory
 # cargo los datos
 
 # cargo los datos
-dataset <- fread("./datasets/dataset_pequeno.csv")
 
-# trabajo solo con los datos con clase, es decir 202107
-dataset <- dataset[clase_ternaria != ""]
 
 # genero el archivo para Kaggle
 # creo la carpeta donde va el experimento
@@ -108,37 +114,65 @@ archivo_salida <- "./exp/HT2020/gridsearch.txt"
 # genero la data.table donde van los resultados del Grid Search
 tb_grid_search <- data.table( max_depth = integer(),
                               min_split = integer(),
+                              min_bucket = integer(),
+                              cp = integer(),
                               ganancia_promedio = numeric() )
 
 
 # itero por los loops anidados para cada hiperparametro
 
-for (vmax_depth in c(4, 6, 8, 10, 12, 14)) {
-  for (vmin_split in c(1000, 800, 600, 400, 200, 100, 50, 20, 10)) {
-    # notar como se agrega
-
-    # vminsplit  minima cantidad de registros en un nodo para hacer el split
-    param_basicos <- list(
-      "cp" = -0.5, # complejidad minima
-      "minsplit" = vmin_split,
-      "minbucket" = 5, # minima cantidad de registros en una hoja
-      "maxdepth" = vmax_depth
-    ) # profundidad máxima del arbol
-
-    # Un solo llamado, con la semilla 17
-    ganancia_promedio <- ArbolesMontecarlo(PARAM$semillas, param_basicos)
-
-    # agrego a la tabla
-    tb_grid_search <- rbindlist( 
-      list( tb_grid_search, 
-            list( vmax_depth, vmin_split, ganancia_promedio) ) )
-
+for (vmax_depth in c(6)) {
+  for (vmin_split in c(600)) {
+    for (vmin_bucket in c(150)) {  
+      for (vcp in c(-0.8)) {
+        # notar como se agrega
+        
+        #  for (vmax_depth in c(2, 4, 6, 8, 10)) {
+        # for (vmin_split in c(200,300,600,800, 1000, 2000)) {
+        #  for (vmin_bucket in c(100,300,500,600,800)) {  
+        # for (vcp in c(-0.8,-0.3,0)) {  
+        
+        
+        
+        # vminsplit  minima cantidad de registros en un nodo para hacer el split
+        param_basicos <- list(
+          "cp" = vcp, # complejidad minima
+          "minsplit" = vmin_split,
+          "minbucket" = vmin_bucket, # minima cantidad de registros en una hoja
+          "maxdepth" = vmax_depth
+          
+        ) # profundidad máxima del arbol
+        
+        # Un solo llamado, con la semilla 17
+        ganancia_promedio <- ArbolesMontecarlo(PARAM$semillas, param_basicos)
+        print(ganancia_promedio)
+        
+        # agrego a la tabla
+        tb_grid_search <- rbindlist( 
+          list( tb_grid_search, 
+                list( vmax_depth, vmin_split, vmin_bucket, vcp, ganancia_promedio) ) )
+      }
+    }
   }
-
+  print(ganancia_promedio)
   # escribo la tabla a disco en cada vuelta del loop mas externo
   Sys.sleep(2)  # espero un par de segundos
-
-  fwrite( tb_grid_search,
-          file = archivo_salida,
+  
+  fwrite( tb_grid_search, 
+          file = archivo_salida_binaria,
           sep = "\t" )
 }
+
+
+## para borrra al final-----------------------------------------
+#head(tb_grid_search)
+
+
+
+#colnames(dataset
+         )
+
+#dataset2 <-dataset[, -c("clase_ternaria")]
+#colnames(dataset2)
+
+head(filtro)
