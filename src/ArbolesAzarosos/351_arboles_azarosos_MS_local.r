@@ -11,14 +11,14 @@ require("rpart")
 
 # parmatros experimento
 PARAM <- list()
-PARAM$experimento <- 3510
+PARAM$experimento <- 3517
 
 # parameetros rpart
 PARAM$rpart_param <- list(
   "cp" = -1,
-  "minsplit" = 250,
-  "minbucket" = 100,
-  "maxdepth" = 14
+  "minsplit" = 750,
+  "minbucket" = 20,
+  "maxdepth" = 10
 )
 
 # parametros  arbol
@@ -33,7 +33,7 @@ PARAM$num_trees_max <- 500
 #------------------------------------------------------------------------------
 # Aqui comienza el programa
 
-setwd("~/buckets/b1/") # Establezco el Working Directory
+setwd("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\") # Establezco el Working Directory
 
 #cargo MI semilla, que esta en MI bucket
 tabla_semillas <- fread( "./datasets//mis_semillas.txt" )
@@ -127,3 +127,4 @@ for (arbolito in 1:PARAM$num_trees_max) {
     cat(arbolito, " ")
   }
 }
+
