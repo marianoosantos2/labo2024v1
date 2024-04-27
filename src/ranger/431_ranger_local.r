@@ -29,7 +29,7 @@ ksemilla_azar <- tabla_semillas[ 1, semilla ]  # 1 es mi primer semilla
 
 
 # cargo los datos donde entreno
-setwd("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\00000000\\zero_to_hero-mariano")
+dataset <- fread("C:\\Users\\Mariano_Santos\\OneDrive - Universidad Austral\\00 datos\\08-Laboratorio_implementacion_I\\datasets\\dataset_pequeno.csv") # cargo el dataset
 
 dataset[, Master_Finiciomora := NULL ]
 dataset[, Visa_Finiciomora := NULL ]
@@ -90,3 +90,4 @@ fwrite(entrega,
   file = archivo_salida,
   sep = ","
 )
+

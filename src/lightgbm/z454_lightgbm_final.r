@@ -26,7 +26,9 @@ PARAM$finalmodel$num_leaves <- 44
 
 
 PARAM$finalmodel$max_bin <- 31
-
+head(PARAM)
+print(PARAM)
+typeof(PARAM)
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 # Aqui empieza el programa
