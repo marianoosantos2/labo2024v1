@@ -1,0 +1,15 @@
+input:
+- HT0006-02
+- TS0006-02
+modelos_rank: 1.0
+kaggle:
+  envios_desde: 9500
+  envios_hasta: 11500
+  envios_salto: 500
+graficar:
+  envios_desde: 8000
+  envios_hasta: 20000
+  ventana_suavizado: 2001
+qsemillas: 5.0
+experimento: ZZ0006-02
+semilla: 100057

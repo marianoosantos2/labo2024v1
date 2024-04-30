@@ -1,0 +1,23 @@
+PARAM:
+  input:
+  - HT0007-03
+  - TS0007-03
+  modelos_rank: 1.0
+  kaggle:
+    envios_desde: 9500
+    envios_hasta: 11500
+    envios_salto: 500
+  graficar:
+    envios_desde: 8000
+    envios_hasta: 20000
+    ventana_suavizado: 2001
+  qsemillas: 5.0
+  experimento: ZZ0007-03
+  semilla: 100057
+time:
+  start: 20240430 130544
+  end: 20240430 133100
+status:
+  modelo_rank: 1.0
+  sem: 5
+ganancias_suavizadas: 5.8532259e+07

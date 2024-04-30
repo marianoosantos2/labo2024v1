@@ -1,0 +1,9 @@
+         used (Mb) gc trigger (Mb) max used (Mb)
+Ncells 283231 15.2     664251 35.5   451029 24.1
+Vcells 486753  3.8    8388608 64.0  1814485 13.9
+Loading required package: data.table
+Loading required package: yaml
+Loading required package: primes
+Loading required package: lightgbm
+
+modelo_rank:  1 , semillas: 1  2  3  4  5  
