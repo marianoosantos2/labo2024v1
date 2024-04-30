@@ -212,6 +212,37 @@ Corregir_MachineLearning <- function(dataset) {
   dataset[foto_mes == 202006, cmobile_app_trx := NA]
 }
 #------------------------------------------------------------------------------
+Corregir_media <- function(dataset) {
+  gc()
+  # acomodo los errores del dataset(dataset),
+  ratios_cero <- dataset[, lapply(.SD, function(x) sum(x == 0, na.rm = TRUE) / .N), by = foto_mes]
+  resultados <- ratios_cero[, lapply(.SD, function(x) x == 1), by = foto_mes]
+  resultados_long <- melt(resultados, id.vars = "foto_mes", variable.name = "Variable", value.name = "Todos_ceros")
+  resultados_filtrados <- resultados_long[Todos_ceros == TRUE, .(Variable, foto_mes)]
+  resultados_filtrados[, Variable := gsub("Ratio_", "", Variable)]
+  
+  # Calcular promedio registro a registro entre valores mes anterior y posterior, y asignar.
+  for (i in seq_len(nrow(resultados_filtrados))) {
+    var_var <- resultados_filtrados$Variable[i]
+    var_mes  <- resultados_filtrados$foto_mes[i]
+    var_mes_ant <- var_mes - 1
+    var_mes_pos <- var_mes + 1
+    
+    clientes_mes <- dataset[foto_mes == var_mes, .(numero_de_cliente)]
+    clientes_mes_ant <- dataset[foto_mes == var_mes_ant, .(numero_de_cliente)]
+    clientes_mes_pos <- dataset[foto_mes == var_mes_pos, .(numero_de_cliente)]
+    
+    clientes_com <- intersect(intersect(clientes_mes$numero_de_cliente, clientes_mes_ant$numero_de_cliente), clientes_mes_pos$numero_de_cliente)
+    valor_cliente_mes_ant <- dataset[foto_mes == var_mes_ant & numero_de_cliente %in% clientes_com, .(numero_de_cliente, valor = get(var_var))]
+    valor_cliente_mes_pos <- dataset[foto_mes == var_mes_pos & numero_de_cliente %in% clientes_com, .(numero_de_cliente, valor = get(var_var))]
+    
+    merged_data <- merge(valor_cliente_mes_ant, valor_cliente_mes_pos, by = "numero_de_cliente", suffixes = c("_ant", "_pos"))
+    merged_data[, valor_promedio := (valor_ant + valor_pos) / 2]
+    
+    dataset[, (var_var) := as.numeric(get(var_var))]
+    dataset[foto_mes == var_mes & numero_de_cliente %in% clientes_com, (var_var) := merged_data[.SD, on = .(numero_de_cliente), x.valor_promedio]]
+}
+}
 #------------------------------------------------------------------------------
 # Aqui empieza el programa
 OUTPUT$PARAM <- PARAM
@@ -237,7 +268,11 @@ setorderv(dataset, PARAM$dataset_metadata$primarykey)
 switch(PARAM$metodo,
   "MachineLearning"     = Corregir_MachineLearning(dataset),
   "EstadisticaClasica"  = Corregir_EstadisticaClasica(dataset),
-  "metodowicky01"       =Corregir_Wicky01(dataset),
+  "medias"              = Corregir_media(dataset),
+  "extrapolar"          = Corregir_extrapolar(dataset),
+  "locf"                = Corregir_locf(dataset),
+  "inter_random"        = Corregir_InterRandom(dataset),
+  "ratio_prom"          = Corregir_ratio_prom(dataset),
   "Ninguno"             = cat("No se aplica ninguna correccion.\n"),
 )
 
