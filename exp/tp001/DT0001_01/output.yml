@@ -1,0 +1,16 @@
+PARAM:
+  archivo: competencia_2024.csv.gz
+  primarykey:
+  - numero_de_cliente
+  - foto_mes
+  entity_id: numero_de_cliente
+  periodo: foto_mes
+  clase: clase_ternaria
+  experimento: DT0001_01
+  semilla: 100057
+time:
+  start: 20240427 172022
+  end: 20240427 172210
+dataset:
+  ncol: 155
+  nrow: 4883051

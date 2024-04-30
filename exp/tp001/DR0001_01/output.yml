@@ -1,0 +1,12 @@
+PARAM:
+  input: CA0001_01
+  variables_intrames: no
+  metodo: rank_cero_fijo
+  experimento: DR0001_01
+  semilla: 100057
+time:
+  start: 20240427 172409
+  end: 20240427 172807
+dataset:
+  ncol: 154
+  nrow: 4883051

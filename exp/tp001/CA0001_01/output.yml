@@ -1,0 +1,11 @@
+PARAM:
+  input: DT0001_01
+  metodo: MachineLearning
+  experimento: CA0001_01
+  semilla: 100057
+time:
+  start: 20240427 172233
+  end: 20240427 172402
+dataset:
+  ncol: 154
+  nrow: 4883051
