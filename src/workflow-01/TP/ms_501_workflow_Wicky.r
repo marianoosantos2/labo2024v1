@@ -87,7 +87,7 @@ CA_catastrophe_default <- function( pmyexp, pinputexps, pserver="local")
   param_local$meta$script <- "/src/workflow-01/z521_CA_reparar_dataset.r"
 
   # Opciones MachineLearning EstadisticaClasica Ninguno
-  param_local$metodo <- "MachineLearning" # MachineLearning EstadisticaClasica Ninguno
+  param_local$metodo <- "Ninguno" # MachineLearning EstadisticaClasica Ninguno
 
   return( exp_correr_script( param_local ) ) # linea fija}
 }
