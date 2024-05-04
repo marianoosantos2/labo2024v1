@@ -14,7 +14,7 @@ require("ParamHelpers")
 envg <- env()
 
 envg$EXPENV <- list()
-envg$EXPENV$exp_dir <- "~/buckets/b1/exp/"
+envg$EXPENV$exp_dir <- "~/buckets/b1/exp/02-exp-ml01/"
 envg$EXPENV$wf_dir <- "~/buckets/b1/flow/"
 envg$EXPENV$wf_dir_local <- "~/flow/"
 envg$EXPENV$repo_dir <- "~/labo2024v1/"
@@ -84,10 +84,10 @@ CA_catastrophe_default <- function( pmyexp, pinputexps, pserver="local")
   if( -1 == (param_local <- exp_init( pmyexp, pinputexps, pserver ))$resultado ) return( 0 )# linea fija
 
 
-  param_local$meta$script <- "/src/workflow-01/z521_CA_reparar_dataset.r"
+  param_local$meta$script <- "/src/workflow-01/521_CA_reparar_dataset_exp02.r"
 
   # Opciones MachineLearning EstadisticaClasica Ninguno
-  param_local$metodo <- "Ninguno" # MachineLearning EstadisticaClasica Ninguno
+  param_local$metodo <- "MachineLearning" # MachineLearning EstadisticaClasica Ninguno
 
   return( exp_correr_script( param_local ) ) # linea fija}
 }
@@ -207,10 +207,10 @@ TS_strategy_guantesblancos_202107 <- function( pmyexp, pinputexps, pserver="loca
 
 
   param_local$future <- c(202107)
-  param_local$final_train <- c(202105, 202104, 202103,202102, 202101, 202012,202011, 202010, 202009)
+  param_local$final_train <- c(202105, 202103,202102, 202101, 202012, 202010, 202009)
 
 
-  param_local$train$training <- c(202103, 202102, 202101, 202012, 202011, 202010, 202009, 202008, 202007)
+  param_local$train$training <- c(202103, 202101, 202012, 202011, 202010, 202009, 202007)
   param_local$train$validation <- c(202104)
   param_local$train$testing <- c(202105)
 
@@ -276,7 +276,7 @@ HT_tuning_guantesblancos <- function( pmyexp, pinputexps, pserver="local")
 
 
   # una Beyesian de Guantes Blancos, solo hace 15 iteraciones
-  param_local$bo_iteraciones <- 50 # iteraciones de la Optimizacion Bayesiana
+  param_local$bo_iteraciones <- 25 # iteraciones de la Optimizacion Bayesiana
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -363,12 +363,12 @@ corrida_guantesblancos_202107 <- function( pnombrewf, pvirgen=FALSE )
 
 # Hago primero esta corrida que me genera los experimentos
 # DT0001, CA0001, DR0001, FE0001, TS0001, HT0001 y ZZ0001
-#corrida_guantesblancos_202109( "gb01" )
+corrida_guantesblancos_202109( "exp02-01" )
 
 
 # Luego partiendo de  FE0001
 # genero TS0002, HT0002 y ZZ0002
 
-corrida_guantesblancos_202107( "gb02" )
+corrida_guantesblancos_202107( "exp02-02" )
 
  
