@@ -24,7 +24,7 @@ package.check <- lapply(
 envg <- env()
 
 envg$EXPENV <- list()
-envg$EXPENV$exp_dir <- "~/buckets/b1/exp/001-comp-02/"
+envg$EXPENV$exp_dir <- "~/buckets/b1/exp/001-comp-03/"
 envg$EXPENV$wf_dir <- "~/buckets/b1/flow/"
 envg$EXPENV$wf_dir_local <- "~/buckets/b1/flow/"
 envg$EXPENV$repo_dir <- "~/labo2024v1/"
@@ -173,7 +173,7 @@ FE_historia_guantesblancos <- function( pmyexp, pinputexps, pserver="local")
   
   # no me engraso las manos con los Canaritos Asesinos
   # varia de 0.0 a 2.0, si es 0.0 NO se activan
-  param_local$CanaritosAsesinos$ratio <- 0.8
+  param_local$CanaritosAsesinos$ratio <- 0.2
   # desvios estandar de la media, para el cutoff
   param_local$CanaritosAsesinos$desvios <- 4.0
   
@@ -281,17 +281,17 @@ HT_tuning_guantesblancos <- function( pmyexp, pinputexps, pserver="local")
     max_drop = 50, # <=0 means no limit
     skip_drop = 0.5, # 0.0 <= skip_drop <= 1.0
     
-    extra_trees = TRUE,
+    extra_trees = FALSE,
     # White Gloves Bayesian Optimization, with a happy narrow exploration
     learning_rate = c( 0.6 ),
     feature_fraction = c( 0.7 ),
-    num_leaves = c( 40L, 500L,  "integer" ),
-    min_data_in_leaf = c( 800L, 4000L, "integer" )
+    num_leaves = c( 100L,  "integer" ),
+    min_data_in_leaf = c( 3000L, "integer" )
   )
   
   
   # una Beyesian de Guantes Blancos, solo hace 15 iteraciones
-  param_local$bo_iteraciones <- 20 # iteraciones de la Optimizacion Bayesiana
+  param_local$bo_iteraciones <- 5 # iteraciones de la Optimizacion Bayesiana
   
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -317,7 +317,7 @@ ZZ_final_guantesblancos <- function( pmyexp, pinputexps, pserver="local")
   param_local$graficar$ventana_suavizado <- 2001L
   
   # Una corrida de Guantes Blancos solo usa 5 semillas
-  param_local$qsemillas <- 30
+  param_local$qsemillas <- 20
   
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -379,9 +379,9 @@ corrida_guantesblancos_202107 <- function( pnombrewf, pvirgen=FALSE )
 # Hago primero esta corrida que me genera los experimentos
 # DT0001, CA0001, DR0001, FE0001, TS0001, HT0001 y ZZ0001
   #corrida_guantesblancos_202109 ( "00-comp01" )
-  corrida_guantesblancos_202109( "02-comp-01" )
+  corrida_guantesblancos_202109( "03-comp-01" )
 
 # Luego partiendo de  FE0001
 # genero TS0002, HT0002 y ZZ0002
 
-#corrida_guantesblancos_202107( "00-comp02" )
+#corrida_guantesblancos_202107( "03-comp02" )
