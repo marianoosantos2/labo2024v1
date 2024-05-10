@@ -91,7 +91,7 @@ DR_drifting_baseline <- function( pmyexp, pinputexps, pserver="local")
   if( -1 == (param_local <- exp_init( pmyexp, pinputexps, pserver ))$resultado ) return( 0 )# linea fija
 
 
-  param_local$meta$script <- "/src/workflow-01/z531_DR_corregir_drifting.r"
+  param_local$meta$script <- "/src/workflow-01/531_DR_corregir_drifting_NA.r"
 
   # No me engraso las manos con Feature Engineering manual
   param_local$variables_intrames <- TRUE
@@ -161,15 +161,15 @@ TS_strategy_baseline_202109 <- function( pmyexp, pinputexps, pserver="local")
 
 
   param_local$future <- c(202109)
-  param_local$final_train <- c(202004, 202005, 202107, 202106, 202105, 202104, 202103, 202102, 202101, 202012, 202011)
+  param_local$final_train <- c(202107, 202106, 202105, 202104, 202103, 202102, 202101, 202012, 202011)
 
 
-  param_local$train$training <- c(202008, 202007, 202105, 202104, 202103, 202102, 202101, 202012, 202011, 202010, 202009)
+  param_local$train$training <- c(202105, 202104, 202103, 202102, 202101, 202012, 202011, 202010, 202009)
   param_local$train$validation <- c(202106)
   param_local$train$testing <- c(202107)
 
   # undersampling  baseline
-  param_local$train$undersampling <- 0.12
+  param_local$train$undersampling <- 0.1
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -184,15 +184,15 @@ TS_strategy_baseline_202107 <- function( pmyexp, pinputexps, pserver="local")
 
 
   param_local$future <- c(202107)
-  param_local$final_train <- c(202008, 202007, 202105, 202104, 202103, 202102, 202101, 202012, 202011, 202010, 202009)
+  param_local$final_train <- c(202105, 202104, 202103, 202102, 202101, 202012, 202011)
 
 
-  param_local$train$training <- c(202005, 202004, 202103, 202102, 202101, 202012, 202011, 202010, 202009, 202008, 202007)
+  param_local$train$training <- c(202103, 202102, 202101, 202012, 202011, 202010, 202009)
   param_local$train$validation <- c(202104)
   param_local$train$testing <- c(202105)
 
   # undersampling  baseline
-  param_local$train$undersampling <- 0.12
+  param_local$train$undersampling <- 0.1
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -243,13 +243,13 @@ HT_tuning_baseline <- function( pmyexp, pinputexps, pserver="local")
     # Quasi  baseline, el minimo learning_rate es 0.02 !!
     learning_rate = c( 0.6 ),
     feature_fraction = c( 0.7 ),
-    num_leaves = c( 100L, "integer" ),
-    min_data_in_leaf = c( 3000L, "integer" )
+    num_leaves = c( 8L,  "integer" ),
+    min_data_in_leaf = c( 100L, 2000L, "integer" )
   )
 
 
   # una Beyesian de Guantes Blancos, solo hace 15 iteraciones
-  param_local$bo_iteraciones <- 5 # iteraciones de la Optimizacion Bayesiana
+  param_local$bo_iteraciones <- 10 # iteraciones de la Optimizacion Bayesiana
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -275,7 +275,7 @@ ZZ_final_baseline <- function( pmyexp, pinputexps, pserver="local")
   param_local$graficar$ventana_suavizado <- 2001L
 
   # Una corrida de Guantes Blancos solo usa 5 semillas
-  param_local$qsemillas <- 10
+  param_local$qsemillas <- 5
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -302,7 +302,7 @@ ZZ_final_semillerio_baseline <- function( pmyexp, pinputexps, pserver="local")
 
   # El parametro fundamental de semillerio
   # Es la cantidad de LightGBM's que ensamblo
-  param_local$semillerio <- 20
+  param_local$semillerio <- 10
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -369,12 +369,12 @@ corrida_baseline_semillerio_202107 <- function( pnombrewf, pvirgen=FALSE )
 #Aqui empieza el programa
 
 
-corrida_baseline_semillerio_202109( "corrida01" )
+corrida_baseline_semillerio_202109( "basem01" )
 
 
 # Luego partiendo de  FE0001
 # genero TS0002, HT0002 y ZZ0002
 
-corrida_baseline_semillerio_202107( "corrida02" )
+corrida_baseline_semillerio_202107( "basem02" )
 
  
