@@ -112,8 +112,8 @@ FE_historia_baseline <- function( pmyexp, pinputexps, pserver="local")
   param_local$meta$script <- "/src/workflow-01/z541_FE_historia.r"
 
   param_local$lag1 <- TRUE
-  param_local$lag2 <- FALSE # no me engraso con los lags de orden 2
-  param_local$lag3 <- FALSE # no me engraso con los lags de orden 3
+  param_local$lag2 <- TRUE # no me engraso con los lags de orden 2
+  param_local$lag3 <- TRUE # no me engraso con los lags de orden 3
 
   # baseline
   param_local$Tendencias1$run <- TRUE  # FALSE, no corre nada de lo que sigue
@@ -157,7 +157,7 @@ TS_strategy_baseline_202109 <- function( pmyexp, pinputexps, pserver="local")
 {
   if( -1 == (param_local <- exp_init( pmyexp, pinputexps, pserver ))$resultado ) return( 0 )# linea fija
 
-  param_local$meta$script <- "/src/workflow-01/z551_TS_training_strategy.r"
+  param_local$meta$script <- "/src/workflow-01/551_TS_training_strategy_guantesnegros.r"
 
 
   param_local$future <- c(202109)
