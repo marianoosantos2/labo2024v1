@@ -171,7 +171,7 @@ TS_strategy_baseline_202109 <- function( pmyexp, pinputexps, pserver="local")
   param_local$train$testing <- c(202107)
 
   # undersampling  baseline
-  param_local$train$undersampling <- 0.30
+  param_local$train$undersampling <- 0.25
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -304,7 +304,7 @@ ZZ_final_semillerio_baseline <- function( pmyexp, pinputexps, pserver="local")
 
   # El parametro fundamental de semillerio
   # Es la cantidad de LightGBM's que ensamblo
-  param_local$semillerio <- 100
+  param_local$semillerio <- 70
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
