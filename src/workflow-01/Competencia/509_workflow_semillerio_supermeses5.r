@@ -146,7 +146,7 @@ FE_historia_baseline <- function( pmyexp, pinputexps, pserver="local")
   # varia de 0.0 a 2.0, si es 0.0 NO se activan
   param_local$CanaritosAsesinos$ratio <- 1.5
   # desvios estandar de la media, para el cutoff
-  param_local$CanaritosAsesinos$desvios <- 4.0
+  param_local$CanaritosAsesinos$desvios <- 1.5
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
