@@ -126,7 +126,7 @@ FE_historia_baseline <- function( pmyexp, pinputexps, pserver="local")
   param_local$Tendencias1$ratiomax <- FALSE
 
   # baseline
-  param_local$Tendencias2$run <- TRUE
+  param_local$Tendencias2$run <- FALSE
   param_local$Tendencias2$ventana <- 6
   param_local$Tendencias2$tendencia <- TRUE
   param_local$Tendencias2$minimo <- FALSE
@@ -161,15 +161,17 @@ TS_strategy_baseline_202109 <- function( pmyexp, pinputexps, pserver="local")
 
 
   param_local$future <- c(202109)
-  param_local$final_train <- c(201909, 201910, 201911, 201912,  202002, 202003, 202004, 202005, 202007, 202008, 202009, 202010, 202011, 202012, 202101, 202102, 202103, 202104, 202105, 202106, 202107)
+  param_local$final_train <- c(202107, 202106, 202105, 202104, 202103, 202102, 202101, 202012, 202011, 202010, 202009, 202008, 202002, 202001, 201912,
+                               201911, 201910, 201909)
 
 
-  param_local$train$training <- c(201907, 201908, 201909, 201910, 201911, 201912,  202002, 202003, 202004, 202005, 202007, 202008, 202009, 202010, 202011, 202012, 202101, 202102, 202103, 202104, 202105)
+  param_local$train$training <- c(202105, 202104, 202103, 202102, 202101, 202012, 202011, 202010, 202009, 202008, 202002, 202001, 201912, 201911,
+                                  201910, 201909, 201908, 201907)
   param_local$train$validation <- c(202106)
   param_local$train$testing <- c(202107)
 
   # undersampling  baseline
-  param_local$train$undersampling <- 0.13
+  param_local$train$undersampling <- 0.25
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -241,7 +243,7 @@ HT_tuning_baseline <- function( pmyexp, pinputexps, pserver="local")
 
     extra_trees = TRUE,
     # Quasi  baseline, el minimo learning_rate es 0.02 !!
-    learning_rate = c( 0.05, 0.8 ),
+    learning_rate = c( 0.1, 0.8 ),
     feature_fraction = c( 0.45, 0.85 ),
     num_leaves = c( 80L, 1200L,  "integer" ),
     min_data_in_leaf = c( 1000L, 5000L, "integer" )
@@ -249,7 +251,7 @@ HT_tuning_baseline <- function( pmyexp, pinputexps, pserver="local")
 
 
   # una Beyesian de Guantes Blancos, solo hace 15 iteraciones
-  param_local$bo_iteraciones <- 35 # iteraciones de la Optimizacion Bayesiana
+  param_local$bo_iteraciones <- 24 # iteraciones de la Optimizacion Bayesiana
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -302,7 +304,7 @@ ZZ_final_semillerio_baseline <- function( pmyexp, pinputexps, pserver="local")
 
   # El parametro fundamental de semillerio
   # Es la cantidad de LightGBM's que ensamblo
-  param_local$semillerio <- 80
+  param_local$semillerio <- 70
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
